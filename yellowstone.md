@@ -28,14 +28,14 @@ yellowstone
 
     ## Loading required package: rgdal
 
-    ## rgdal: version: 1.3-3, (SVN revision 759)
+    ## rgdal: version: 1.3-9, (SVN revision 794)
     ##  Geospatial Data Abstraction Library extensions to R successfully loaded
     ##  Loaded GDAL runtime: GDAL 2.1.3, released 2017/20/01
     ##  Path to GDAL shared files: /Library/Frameworks/R.framework/Versions/3.4/Resources/library/rgdal/gdal
     ##  GDAL binary built with GEOS: FALSE 
     ##  Loaded PROJ.4 runtime: Rel. 4.9.3, 15 August 2016, [PJ_VERSION: 493]
     ##  Path to PROJ.4 shared files: /Library/Frameworks/R.framework/Versions/3.4/Resources/library/rgdal/proj
-    ##  Linking to sp version: 1.2-7
+    ##  Linking to sp version: 1.3-1
 
     ## 
     ## Attaching package: 'dplyr'
@@ -62,9 +62,9 @@ yellowstone
 
     ## Loading required package: Matrix
 
-    ## rgeos version: 0.3-28, (SVN revision 572)
-    ##  GEOS runtime version: 3.6.1-CAPI-1.10.1 r0 
-    ##  Linking to sp version: 1.2-7 
+    ## rgeos version: 0.4-2, (SVN revision 581)
+    ##  GEOS runtime version: 3.6.1-CAPI-1.10.1 
+    ##  Linking to sp version: 1.3-1 
     ##  Polygon checking: TRUE
 
     ## Loading required package: deldir
@@ -148,7 +148,7 @@ yellowstone
     ## 
     ##     pretty
 
-    ## Linking to GEOS 3.6.1, GDAL 2.1.3, proj.4 4.9.3
+    ## Linking to GEOS 3.6.1, GDAL 2.1.3, PROJ 4.9.3
 
     ## Loading required package: snowfall
 
@@ -342,10 +342,10 @@ df_5 <- subset(df_sum, num_species == 5)
 ``` r
 df <- df_5
 factpal <- colorFactor(topo.colors(5), df$common_name_simplified)
-
+zoom = 9
 M<-    leaflet(df) %>%
       addTiles() %>%
-       setView(lng = mean(df$longitude), lat = mean(df$latitude) , zoom =10) %>%
+       setView(lng = mean(df$longitude), lat = mean(df$latitude) , zoom =zoom) %>%
       addCircleMarkers(lng = df$longitude,
                        lat = df$latitude,
                  #color = color.vec[df$taxon_num],
@@ -376,13 +376,15 @@ filled.contour(dens)
 #### show all the data for one month (June) in 2018
 
 ``` r
+zoom = 9
+load("sppinat.Rdata")
 df <- subset(sppinat, year == 2018 & month == 6)
 
 factpal <- colorFactor(topo.colors(5), df$common_name_simplified)
 
 M<-  leaflet(df) %>%
       addTiles() %>%
-       setView(lng = mean(df$longitude), lat = mean(df$latitude) , zoom =10) %>%
+       setView(lng = mean(df$longitude), lat = mean(df$latitude) , zoom =zoom) %>%
       addCircleMarkers(lng = df$longitude,
                        lat = df$latitude,
                  #color = color.vec[df$taxon_num],
@@ -472,7 +474,7 @@ print(total)
 #output to csv
 ```
 
-    ## 756
+    ## 757
 
 ``` python
 df = pd.DataFrame.from_dict(init)
@@ -554,37 +556,19 @@ setup_twitter_oauth(consumer_key, consumer_secret, access_token, access_secret)
 X = mean(c(bbox$min[1], bbox$max[1]))#approx x and y
 Y = mean(c(bbox$min[2], bbox$max[2]))
 
-tw = searchTwitter('#wolves', n = 1e4, since = '2010-01-01', retryOnRateLimit = 1e3, geocode = paste(Y, X, "50km", sep = ","))
-```
+# tw = searchTwitter('#wolves', n = 1e4, since = '2010-01-01', retryOnRateLimit = 1e3, geocode = paste(Y, X, "50km", sep = ","))
+# d = twListToDF(tw)
 
-    ## Warning in doRppAPICall("search/tweets", n, params = params,
-    ## retryOnRateLimit = retryOnRateLimit, : 10000 tweets were requested but the
-    ## API can only return 1
+#dim(d)
 
-``` r
-d = twListToDF(tw)
-
-dim(d)
-```
-
-    ## [1]  1 16
-
-``` r
 # tw = searchTwitter('#moose', n = 1e4, since = '2010-01-01', retryOnRateLimit = 1e3, geocode = paste(Y, X, "50km", sep = ","))
 # d = twListToDF(tw)
 
 # tw = searchTwitter('#bear', n = 1e4, since = '2010-01-01', retryOnRateLimit = 1e3, geocode = paste(Y, X, "50km", sep = ","))
 # d = twListToDF(tw)
 
-tw = searchTwitter('#bison', n = 1e4, since = '2010-01-01', retryOnRateLimit = 1e3, geocode = paste(Y, X, "50km", sep = ","))
-```
-
-    ## Warning in doRppAPICall("search/tweets", n, params = params,
-    ## retryOnRateLimit = retryOnRateLimit, : 10000 tweets were requested but the
-    ## API can only return 1
-
-``` r
-d = twListToDF(tw)
+# tw = searchTwitter('#bison', n = 1e4, since = '2010-01-01', retryOnRateLimit = 1e3, geocode = paste(Y, X, "50km", sep = ","))
+# d = twListToDF(tw)
 
 
 

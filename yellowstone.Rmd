@@ -151,10 +151,10 @@ df_5 <- subset(df_sum, num_species == 5)
 ```{r}
 df <- df_5
 factpal <- colorFactor(topo.colors(5), df$common_name_simplified)
-
+zoom = 9
 M<-    leaflet(df) %>%
       addTiles() %>%
-       setView(lng = mean(df$longitude), lat = mean(df$latitude) , zoom =10) %>%
+       setView(lng = mean(df$longitude), lat = mean(df$latitude) , zoom =zoom) %>%
       addCircleMarkers(lng = df$longitude,
                        lat = df$latitude,
                  #color = color.vec[df$taxon_num],
@@ -180,13 +180,15 @@ filled.contour(dens)
 
 ####show all the data for one month (June) in 2018
 ```{r June_2018}
+zoom = 9
+load("sppinat.Rdata")
 df <- subset(sppinat, year == 2018 & month == 6)
 
 factpal <- colorFactor(topo.colors(5), df$common_name_simplified)
 
 M<-  leaflet(df) %>%
       addTiles() %>%
-       setView(lng = mean(df$longitude), lat = mean(df$latitude) , zoom =10) %>%
+       setView(lng = mean(df$longitude), lat = mean(df$latitude) , zoom =zoom) %>%
       addCircleMarkers(lng = df$longitude,
                        lat = df$latitude,
                  #color = color.vec[df$taxon_num],
@@ -270,7 +272,7 @@ d_first_page.to_csv('flickr.wolf.csv')
 ```
 
 ####check if flickr gave additional images relative to iNaturalist for wolves
-```{r}
+```{r flickr_wolf}
 load("sppinat.Rdata")
 flickr_wolf <- read.csv("flickr.wolf.csv")
 names(flickr_wolf)
@@ -283,7 +285,7 @@ fw$month = month(fw$date)
 
 ##Twitter
 Returns few records (wolves, bison) or none (moose, bear)
-```{r}
+```{r twitter}
 #https://apps.twitter.com/app/15434357
 #https://cran.r-project.org/web/packages/rtweet/vignettes/intro.html
 #install.packages("twitteR")
@@ -316,10 +318,10 @@ setup_twitter_oauth(consumer_key, consumer_secret, access_token, access_secret)
 X = mean(c(bbox$min[1], bbox$max[1]))#approx x and y
 Y = mean(c(bbox$min[2], bbox$max[2]))
 
-tw = searchTwitter('#wolves', n = 1e4, since = '2010-01-01', retryOnRateLimit = 1e3, geocode = paste(Y, X, "50km", sep = ","))
-d = twListToDF(tw)
+# tw = searchTwitter('#wolves', n = 1e4, since = '2010-01-01', retryOnRateLimit = 1e3, geocode = paste(Y, X, "50km", sep = ","))
+# d = twListToDF(tw)
 
-dim(d)
+#dim(d)
 
 # tw = searchTwitter('#moose', n = 1e4, since = '2010-01-01', retryOnRateLimit = 1e3, geocode = paste(Y, X, "50km", sep = ","))
 # d = twListToDF(tw)
@@ -327,8 +329,8 @@ dim(d)
 # tw = searchTwitter('#bear', n = 1e4, since = '2010-01-01', retryOnRateLimit = 1e3, geocode = paste(Y, X, "50km", sep = ","))
 # d = twListToDF(tw)
 
-tw = searchTwitter('#bison', n = 1e4, since = '2010-01-01', retryOnRateLimit = 1e3, geocode = paste(Y, X, "50km", sep = ","))
-d = twListToDF(tw)
+# tw = searchTwitter('#bison', n = 1e4, since = '2010-01-01', retryOnRateLimit = 1e3, geocode = paste(Y, X, "50km", sep = ","))
+# d = twListToDF(tw)
 
 
 
